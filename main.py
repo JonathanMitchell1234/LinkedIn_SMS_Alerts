@@ -3,9 +3,17 @@ from selenium.webdriver.common.keys import Keys
 from twilio.rest import Client
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import undetected_chromedriver as uc
+import time
+from selenium.webdriver.remote.webdriver import By
+
+
 
 # Set up LinkedIn login session using Selenium
-driver = webdriver.Chrome()
+opts = uc.ChromeOptions()
+opts.add_argument( f'--proxy-server=socks5://127.0.0.1:9050' )
+driver = uc.Chrome( options = opts )
+driver = uc.Chrome()
 driver.get('https://www.linkedin.com')
 # Fill in your LinkedIn login credentials
 username = driver.find_element(By.ID, 'session_key')
@@ -19,16 +27,16 @@ search_keywords = "software engineer"
 search_location = "San Francisco"
 
 # Perform a job search on LinkedIn
-search_box = driver.find_element(By.ID,'input.search-global-typeahead__input')
-# Define the search box element
-search_box = driver.find_element(By.CSS_SELECTOR, 'input[aria-label="Search"]')
+search_box = driver.find_element(By.CLASS,'search-global-typeahead__input')
+# # Define the search box element
+# search_box = driver.find_element(By.CSS_SELECTOR, 'input[aria-label="Search"]')
 
 # Send search keywords and press enter
 search_box.send_keys(search_keywords)
 search_box.send_keys(Keys.RETURN)
-
+ 
 # Wait for search results to load (you may need to adjust the sleep duration)
-import time
+
 time.sleep(5)
 
 # Extract job listings (for demonstration purposes, only first 5 are shown)
